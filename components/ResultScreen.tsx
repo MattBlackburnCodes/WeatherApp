@@ -2,10 +2,15 @@ import React from "react";
 import { View, Text, StyleSheet, TextInput } from "react-native";
 
 export default function ResultScreen({ route }) {
-    const zip = route.params.zip;
+    const { city, state, temp, country, weather, description } = route.params
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>Zip code entered is: {zip}</Text>
+            <Text style={styles.text}>City Entered: {city}, {state}</Text>
+            <Text style={styles.text}>Country: {country}</Text>
+            <Text style={styles.text}>Temperature: {temp}</Text>
+            <Text style={styles.text}>Weather: {weather}</Text>
+            <Text style={styles.text}>Description: {description}</Text>
+
         </View>
     )
 } 

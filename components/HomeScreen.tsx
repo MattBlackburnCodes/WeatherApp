@@ -7,24 +7,55 @@ import {
     Keyboard, 
     TouchableWithoutFeedback,
     TouchableOpacity,
-    ImageBackground 
+    ImageBackground,
+    Alert 
 
 } from 'react-native';
 import React from 'react';
 
 export default function HomeScreen({ navigation }) {
     const [zip, setZip] = React.useState('');
+    const [weather, setWeather] = React.useState(null);
+    const [loading, setLoading] = React.useState(false);
 
-    const handlePress = () => {
-        if (zip.length !== 5) {
+    // Function to fetch weather data
+    const fetchWeather = async () => {
+        if (!zip) {
+            alert('Please enter a zip code');
+            return;
+        } else if (zip.length !== 5) {
             alert('Please enter a valid 5 digit zip code');
-        }
-        else{
-            Keyboard.dismiss();
-            navigation.navigate('Results', {zip});
+            return;
         }
         
-    }
+        try {
+            setLoading(true);
+            const apiKey = 'b88d8a93c89a5d26d286f7a9fdf1b028'
+            const response = await fetch(
+                `https://api.openweathermap.org/data/2.5/weather?zip=${zip},US&appid=${apiKey}&units=imperial`
+            );
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch weather data');
+            }
+
+            const data = await response.json();
+            setWeather(data); // Save fetched data to state
+            console.log(data);
+            navigation.navigate('Results', { 
+                city: data.name,
+                country: data.sys.country,
+                //state: data.state,
+                temp: data.main.temp,
+                weather: data.weather[0].main,
+                description: data.weather[0].description
+            });
+        } catch (error) {
+                Alert.alert('Error', error.message || 'Failed to fetch weather data.');
+        } finally {
+                setLoading(false);
+        }
+    };
 
     return (
         <ImageBackground 
@@ -41,12 +72,12 @@ export default function HomeScreen({ navigation }) {
                             style={styles.input}
                             onChangeText={zip => setZip(zip)}
                             value={zip}
-                            placeholder="Enter zip code"
-                            keyboardType="numeric"
+                            placeholder="Enter city name"
                             placeholderTextColor={'black'}
+                            keyboardType="numeric"
                             
                         />
-                        <TouchableOpacity style={styles.button} onPress={handlePress}>
+                        <TouchableOpacity style={styles.button} onPress={fetchWeather}>
                             <Text>Go to Weather Page</Text>
                         </TouchableOpacity>
                     </View>
@@ -77,7 +108,8 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: 'bold',
         textAlign: 'center',
-        color: 'black'
+        color: 'black',
+        
     },
     input: {
         height: 40,
@@ -87,6 +119,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         padding: 10,
         textAlign: 'center',
+        
         
     },
     button:{

@@ -18,6 +18,7 @@ export default function HomeScreen({ navigation }) {
     const [weather, setWeather] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
 
+
     // Function to fetch weather data
     const fetchWeather = async () => {
         if (!zip) {
@@ -72,7 +73,7 @@ export default function HomeScreen({ navigation }) {
                             style={styles.input}
                             onChangeText={zip => setZip(zip)}
                             value={zip}
-                            placeholder="Enter city name"
+                            placeholder="Enter zip code"
                             placeholderTextColor={'black'}
                             keyboardType="numeric"
                             

@@ -5,6 +5,7 @@ import React from 'react';
 import HomeScreen from '@/components/HomeScreen';
 import ResultsScreen from '@/components/ResultScreen';
 
+
 // Putting stack navigator in a variable
 const Stack = createNativeStackNavigator();
 

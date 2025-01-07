@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import HomeScreen from '@/components/HomeScreen';
 import ResultsScreen from '@/components/ResultScreen';
+import TitleScreen from '@/components/TitleScreen';
 
 
 // Putting stack navigator in a variable
@@ -18,7 +19,7 @@ export default function App() {
         <NavigationIndependentTree>
             <NavigationContainer>
                 <Stack.Navigator 
-                    initialRouteName='Home'
+                    initialRouteName='Title'
                     screenOptions={{
                         headerStyle: {
                             backgroundColor: '#f4511e'
@@ -26,8 +27,30 @@ export default function App() {
                         animation: 'fade'
                     }}
                 >
-                    <Stack.Screen name="Home" component={HomeScreen} />
-                    <Stack.Screen name="Results" component={ResultsScreen} />
+                    <Stack.Screen 
+                        name="Title" 
+                        component={TitleScreen}
+                        options={{
+                            headerShown: false
+                        }}
+                    />
+                    <Stack.Screen 
+                        name="Home" 
+                        component={HomeScreen}
+                        options={{
+                            headerShown: false,
+                        }} 
+                    />
+                    <Stack.Screen 
+                        name="Results" 
+                        component={ResultsScreen}
+                        options={{
+                            headerStyle:{
+                                backgroundColor: 'black',
+                            },
+                            headerTintColor: 'white',
+                        }} 
+                    />
                 </Stack.Navigator>
             </NavigationContainer>
         </NavigationIndependentTree>

@@ -19,6 +19,7 @@ export default function HomeScreen({ navigation }) {
     const [loading, setLoading] = React.useState(false);
 
 
+
     // Function to fetch weather data
     const fetchWeather = async () => {
         if (!zip) {
@@ -46,10 +47,13 @@ export default function HomeScreen({ navigation }) {
             navigation.navigate('Results', { 
                 city: data.name,
                 country: data.sys.country,
-                //state: data.state,
                 temp: data.main.temp,
+                feels_like: data.main.feels_like,
+                temp_min: data.main.temp_min,
+                temp_max: data.main.temp_max,
                 weather: data.weather[0].main,
-                description: data.weather[0].description
+                description: data.weather[0].description,
+                zip: zip
             });
         } catch (error) {
                 Alert.alert('Error', error.message || 'Failed to fetch weather data.');
@@ -96,12 +100,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         textAlign: 'center',
         gap: 40,
-        padding: 40,
+        paddingTop: 150,
         backgroundColor: 'rgba(255, 255, 255, 0.5)',
         opacity: 0.8
     },
     title: {
-        fontSize: 20,
+        fontSize: 35,
         fontWeight: 'bold',
         textAlign: 'center'
     },

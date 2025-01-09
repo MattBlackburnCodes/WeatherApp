@@ -38,12 +38,11 @@ export default function HomeScreen({ navigation }) {
             );
 
             if (!response.ok) {
-                throw new Error('Failed to fetch weather data');
+                throw new Error('Zip code could not be found!');
             }
 
             const data = await response.json();
             setWeather(data); // Save fetched data to state
-            console.log(data);
             navigation.navigate('Results', { 
                 city: data.name,
                 country: data.sys.country,
@@ -53,7 +52,8 @@ export default function HomeScreen({ navigation }) {
                 temp_max: data.main.temp_max,
                 weather: data.weather[0].main,
                 description: data.weather[0].description,
-                zip: zip
+                zip: zip,
+                weatherIcon: data.weather[0].icon
             });
         } catch (error) {
                 Alert.alert('Error', error.message || 'Failed to fetch weather data.');

@@ -1,8 +1,8 @@
 import React from "react";
-import { View, Text, StyleSheet, TextInput, ImageBackground, Image } from "react-native";
+import { View, Text, StyleSheet, ImageBackground, Image } from "react-native";
 
 export default function ResultScreen({ route }) {
-    const { zip, weatherIcon, city, temp, country, weather, description, feels_like, temp_min, temp_max } = route.params
+    const { zip, weatherIcon, city, temp, weather, feels_like, temp_min, temp_max } = route.params
     
     const getWeatherBackground = () => {
         switch (weather) {
@@ -46,10 +46,13 @@ export default function ResultScreen({ route }) {
 
     const getEquipment = (weather) => {
         if (weather === 'Rain') {
-            return `It's raining, bring an umbrella`;
+            return `Bring an umbrella`;
         } else if (weather === 'Snow') {
-            return `It's snowing, bring a coat and gloves`;
-        } else {
+            return `Bring a coat and gloves`;
+        } else if (weather === 'Smoke') { 
+            return `Wear a mask and evacuate if necessary.`;    
+        }
+        else {
             return '';
         }
     }
@@ -61,6 +64,16 @@ export default function ResultScreen({ route }) {
         else{
             return city;
         }
+    }
+
+    const weatherIconURL = (weather) => {
+        switch (weather) {
+            case 'Clear':
+                return 'null';
+            default:
+                return `https://openweathermap.org/img/wn/${weatherIcon}@2x.png`;
+        }
+        
     }
 
     const tempRound = Math.round(temp);
@@ -77,12 +90,17 @@ export default function ResultScreen({ route }) {
             style={{width: '100%', height: '100%'}}
         >
             <View style={styles.container}>
-                <Text style={styles.textCity}>{cityName(zip, city)}</Text> 
-                <Text style={styles.textTemp}>{tempRound}°F</Text>
-                <Text style={styles.text}>Feels Like: {feelsLikeRound}°F</Text>
-                <Text style={styles.text}>L: {tempMinRound}°F H: {tempMaxRound}°F</Text>
-                <Image source={{ uri: `https://openweathermap.org/img/wn/${weatherIcon}@2x.png` }} style={styles.image} />
-                <Text style={styles.text}>Weather: {weather}</Text>
+                <View>
+                    <Text style={styles.textCity}>{cityName(zip, city)}</Text> 
+                    <Text style={styles.textTemp}>{tempRound}°F</Text>
+                </View>
+                <View>
+                    <Text style={styles.text}>Feels Like: {feelsLikeRound}°F</Text>
+                    <Text style={styles.text}>L: {tempMinRound}°F H: {tempMaxRound}°F</Text>
+                </View>
+                
+                <Image source={{ uri: weatherIconURL(weather) }} style={styles.image} />
+                <Text style={styles.text}>{weather}</Text>
                 <Text style={styles.text}>{getClothingAdvice(temp)} {getEquipment(weather)}</Text>
             </View>
         </ImageBackground>
@@ -94,9 +112,11 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-start',
         alignItems: 'center',
-        backgroundColor: 'rgba(135, 206, 235, 1)',
+        backgroundColor: 'rgba(135, 206, 235, .6)',
         paddingTop: 10,
-        opacity: 0.6
+        paddingLeft: 10,
+        paddingRight: 10,
+        gap: 20
     },
     text: {
         fontSize: 20,
@@ -114,8 +134,9 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     image: {
-        width: 100,
-        height: 100,
+        width: 200,
+        height: 200,
         borderRadius: 100,
+        opacity: 1,
     }
 })

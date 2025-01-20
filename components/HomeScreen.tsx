@@ -22,19 +22,24 @@ export default function HomeScreen({ navigation }) {
 
     // Function to fetch weather data
     const fetchWeather = async () => {
-        if (!zip) {
-            alert('Please enter a zip code');
-            return;
-        } else if (zip.length !== 5) {
-            alert('Please enter a valid 5 digit zip code');
-            return;
+        try {
+            if (!zip) {
+                alert('Please enter a zip code');
+                return;
+            } else if (zip.length !== 5) {
+                alert('Please enter a valid 5 digit zip code');
+                return;
+            }
         }
+        catch (error) {
+            Alert.alert('Error', error.message || '"Unexprected input please enter a a numeric value"');
+        }
+        
         
         try {
             setLoading(true);
-            const apiKey = 'b88d8a93c89a5d26d286f7a9fdf1b028'
             const response = await fetch(
-                `https://api.openweathermap.org/data/2.5/weather?zip=${zip},US&appid=${apiKey}&units=imperial`
+                `https://weather-backend-at4amlmzc-matt-blackburns-projects.vercel.app/api/weather?zip=${zip}`
             );
 
             if (!response.ok) {
